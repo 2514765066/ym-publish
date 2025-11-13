@@ -1,0 +1,22 @@
+{
+  "name": "ym-publish",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "pnpm build && node ./dist/index.js",
+    "release": "pnpm build && npm publish"
+  },
+  "files": [
+    "./dist"
+  ],
+  "author": {
+    "name": "张铭洋",
+    "email": "zmy15937111131@outlook.com"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3"
+  }
+}
