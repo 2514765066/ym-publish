@@ -3,9 +3,13 @@ import { UpdateOtion, UpdateConfig, UpdateInfo } from "../type";
 
 //检查更新
 const checkUpdate = async (api: string, appVersion: string) => {
-  const response = await fetch(`${api}/latest`);
+  const url = `${api}/latest`;
+
+  const response = await fetch(url);
 
   if (response.status != 200) {
+    console.error("源地址无法访问", url);
+
     return false;
   }
 
@@ -18,6 +22,8 @@ const checkUpdate = async (api: string, appVersion: string) => {
 
   //没有配置
   if (!latestConfig) {
+    console.error("没有找到latest.json文件");
+
     return false;
   }
 
@@ -27,6 +33,7 @@ const checkUpdate = async (api: string, appVersion: string) => {
 
   //不需要更新
   if (formatVersion(appVersion) >= formatVersion(version)) {
+    console.log("不需要更新");
     return false;
   }
 
@@ -35,6 +42,8 @@ const checkUpdate = async (api: string, appVersion: string) => {
 
   //没有安装包
   if (!info) {
+    console.error("没有找到对应的安装包", name);
+
     return false;
   }
 
