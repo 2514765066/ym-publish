@@ -9,3 +9,6 @@ export * from "./update/gitee";
 
 //类型
 export * from "./type";
+
+//工具
+export * from "./utils/index";

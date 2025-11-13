@@ -1,10 +1,11 @@
-import { readFile, existsFile } from "../utils";
+import { getFile } from "../utils";
 import {
   CreateReleaseOption,
   PublishOption,
   ReleasesOption,
   UploadAssetsOption,
 } from "../type";
+import { existsSync } from "fs";
 
 //创建 Release
 const createRelease = async (url: string, option: CreateReleaseOption) => {
@@ -70,13 +71,13 @@ const uploadAssets = async (url: string, option: UploadAssetsOption) => {
     }
 
     //路径不存在
-    if (!existsFile(filepath)) {
+    if (!existsSync(filepath)) {
       console.error(`文件不存在: ${filepath}`);
       continue;
     }
 
     //读取文件
-    const file = readFile(filepath);
+    const file = getFile(filepath);
 
     await handleUpload(file);
   }

@@ -1,15 +1,10 @@
-import fs from "fs";
+import { readFileSync } from "fs";
 import { basename } from "path";
 import crypto from "crypto";
 
-//判断文件是否存在
-export const existsFile = (path: string) => {
-  return fs.existsSync(path);
-};
-
 //读取文件
-export const readFile = (path: string) => {
-  const buffer = fs.readFileSync(path);
+export const getFile = (path: string) => {
+  const buffer = readFileSync(path);
 
   return new File([buffer], basename(path));
 };
@@ -35,7 +30,7 @@ export const supportsResume = async (url: string) => {
 
 //获取md5
 export const getFileMD5 = (path: string) => {
-  const buffer = fs.readFileSync(path);
+  const buffer = readFileSync(path);
   const hash = crypto.createHash("md5");
   hash.update(buffer);
   return hash.digest("hex");
