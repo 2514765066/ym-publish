@@ -101,7 +101,7 @@ export const useGiteeReleases = ({ token, repo, owner }: ReleasesOption) => {
 
     await uploadAssets(uploadApi, {
       token,
-      filepaths: option.filepaths,
+      filepaths: [...option.filepaths],
     });
 
     console.log("Gitee发布成功");

@@ -1,9 +1,9 @@
-import { basename, dirname } from "path";
+import { dirname } from "path";
 import { createWriteStream, existsSync, statSync } from "fs";
 import { mkdir } from "fs/promises";
 import Stream from "stream";
 import { spawn } from "child_process";
-import { getFileMD5, supportsResume } from "../utils";
+import { supportsResume } from "../utils";
 
 //下载
 export const download = async (

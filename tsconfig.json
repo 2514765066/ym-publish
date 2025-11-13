@@ -7,6 +7,8 @@
     "declarationMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
