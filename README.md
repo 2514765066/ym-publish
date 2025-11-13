@@ -1,8 +1,8 @@
-# 🪶 ym-release
+# 🪶 ym-publish
 
 > 🚀 一键发布工具：支持 **Gitee** 与 **GitHub** 的 Release 创建与附件上传。
 
-`ym-release` 是一个轻量级 TypeScript 工具库，用于自动化发布流程。  
+`ym-publish` 是一个轻量级 TypeScript 工具库，用于自动化发布流程。  
 它可以帮你：
 
 - 创建新版本 Release（支持 Gitee / GitHub）
@@ -21,8 +21,8 @@
 
 ```bash
 # npm
-npm install ym-release
+npm install ym-publish
 
 # pnpm
-pnpm add ym-release
+pnpm add ym-publish
 ```
