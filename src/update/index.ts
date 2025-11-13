@@ -83,8 +83,14 @@ export const download = async (
 };
 
 //安装
-export const install = (installerPath: string) => {
-  const child = spawn(installerPath, {
+export const install = (installerPath: string, silent?: boolean) => {
+  const args = [];
+
+  if (silent) {
+    args.push("/S");
+  }
+
+  const child = spawn(installerPath, args, {
     detached: true,
     stdio: "ignore",
   });
