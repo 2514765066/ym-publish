@@ -9,39 +9,32 @@ export interface ReleasesOption {
   owner: string;
 }
 
-export interface PublishOption {
+export interface Base {
+  //版本
+  version: string;
+
   //标签名
-  tag: string;
+  tag?: string;
 
   //标题名
-  name: string;
+  name?: string;
 
   //使用哪个分支
   commitish?: string;
 
   //内容
   body: string;
+}
 
+export type PublishOption = Base & {
   //文件
   filepaths: (string | File)[];
-}
+};
 
-export interface CreateReleaseOption {
+export type CreateReleaseOption = Base & {
   //token
   token: string;
-
-  //标签名
-  tag: string;
-
-  //标题名
-  name: string;
-
-  //使用哪个分支
-  commitish?: string;
-
-  //内容
-  body: string;
-}
+};
 
 export interface UploadAssetsOption {
   //token

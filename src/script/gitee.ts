@@ -11,9 +11,9 @@ const createRelease = async (url: string, option: CreateReleaseOption) => {
   const form = new FormData();
 
   form.append("access_token", option.token);
-  form.append("tag_name", option.tag);
-  form.append("name", option.name);
-  form.append("target_commitish", option.commitish ?? "main");
+  form.append("tag_name", option.tag || `v${option.version}`);
+  form.append("name", option.name || option.version);
+  form.append("target_commitish", option.commitish || "main");
   form.append("body", option.body);
 
   const response = await fetch(url, {

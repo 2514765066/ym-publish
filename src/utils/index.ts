@@ -1,5 +1,6 @@
 import fs from "fs";
 import { basename } from "path";
+import crypto from "crypto";
 
 //判断文件是否存在
 export const existsFile = (path: string) => {
@@ -30,4 +31,12 @@ export const supportsResume = async (url: string) => {
   });
 
   return res.status === 206;
+};
+
+//获取md5
+export const getFileMD5 = (path: string) => {
+  const buffer = fs.readFileSync(path);
+  const hash = crypto.createHash("md5");
+  hash.update(buffer);
+  return hash.digest("hex");
 };

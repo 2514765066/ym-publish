@@ -9,9 +9,9 @@ import {
 // 创建 Release
 const createRelease = async (url: string, option: CreateReleaseOption) => {
   const payload = {
-    tag_name: option.tag,
+    tag_name: option.tag || `v${option.version}`,
     target_commitish: option.commitish ?? "main",
-    name: option.name,
+    name: option.name || option.version,
     body: option.body,
   };
 
