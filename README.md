@@ -26,3 +26,45 @@ npm install ym-publish
 # pnpm
 pnpm add ym-publish
 ```
+
+## 使用
+
+发布更新
+
+```js
+//调用publish函数传入对应参数即可发布
+const publish = useGiteeReleases({
+  token: "平台token",
+  repo: "仓库名称",
+  owner: "用户名",
+});
+
+publish({
+  //版本
+  version: "",
+
+  //标签名
+  tag: "默认用版本号",
+
+  //标题名
+  name: "默认用v版本号",
+
+  //使用哪个分支
+  commitish: "默认main",
+
+  //内容
+  body: "",
+});
+```
+
+检查版本更新
+
+```js
+const checkUpdate = useGiteeUpdate({
+  repo: "仓库名称",
+  owner: "用户名",
+});
+
+//调用checkUpdate函数传入对应参数即可检测更新
+checkUpdate("当前版本");
+```
