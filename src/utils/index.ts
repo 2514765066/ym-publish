@@ -16,18 +16,6 @@ export const formatVersion = (version: string) => {
   return major * 10000 + minor * 100 + patch;
 };
 
-//是否支持断点
-export const supportsResume = async (url: string) => {
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      Range: "bytes=0-0",
-    },
-  });
-
-  return res.status === 206;
-};
-
 //获取md5
 export const getFileMD5 = (path: string) => {
   const buffer = readFileSync(path);

@@ -1,9 +1,8 @@
 import { dirname } from "path";
-import { createWriteStream, existsSync, statSync } from "fs";
+import { createWriteStream, existsSync } from "fs";
 import { mkdir } from "fs/promises";
 import Stream from "stream";
 import { spawn } from "child_process";
-import { supportsResume } from "../utils";
 
 //下载
 export const download = async (
@@ -18,25 +17,7 @@ export const download = async (
     await mkdir(dir, { recursive: true });
   }
 
-  const canResume = await supportsResume(url);
-
-  // 当前已下载文件大小
-  let downloadedBytes = 0;
-
-  if (canResume && existsSync(filePath)) {
-    downloadedBytes = statSync(filePath).size;
-  }
-
-  const response = await fetch(
-    url,
-    canResume
-      ? {
-          headers: {
-            Range: `bytes=${downloadedBytes}-`,
-          },
-        }
-      : {}
-  );
+  const response = await fetch(url);
 
   if (!response.ok) {
     return false;
@@ -44,14 +25,12 @@ export const download = async (
 
   const total = Number(response.headers.get("content-length") ?? 0);
 
-  const fileStream = createWriteStream(filePath, {
-    flags: downloadedBytes > 0 ? "a" : "w",
-  });
+  const fileStream = createWriteStream(filePath);
 
   //@ts-ignore
   const nodeStream = Stream.Readable.fromWeb(response.body);
 
-  let downloaded = downloadedBytes;
+  let downloaded = 0;
 
   return await new Promise(resolve => {
     if (onProgress) {
