@@ -9,7 +9,7 @@ export interface ReleasesOption {
   owner: string;
 }
 
-export interface Base {
+export interface BaseOption {
   //版本
   version: string;
 
@@ -26,12 +26,12 @@ export interface Base {
   body: string;
 }
 
-export type PublishOption = Base & {
+export type PublishOption = BaseOption & {
   //文件
   filepaths: (string | File)[];
 };
 
-export type CreateReleaseOption = Base & {
+export type CreateReleaseOption = BaseOption & {
   //token
   token: string;
 };
