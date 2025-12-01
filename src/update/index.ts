@@ -1,6 +1,4 @@
-import { dirname } from "path";
-import { createWriteStream, existsSync } from "fs";
-import { mkdir } from "fs/promises";
+import { createWriteStream } from "fs";
 import Stream from "stream";
 import { spawn } from "child_process";
 import { UpdateConfig, UpdateInfo } from "../type";
@@ -8,13 +6,11 @@ import { formatVersion } from "../utils";
 
 /**
  * 检查更新
- * @param api 带release的api
+ * @param url 获取最新更新的url地址
  * @param appVersion 当前版本
  * @returns
  */
-export const checkUpdate = async (api: string, appVersion: string) => {
-  const url = `${api}/latest`;
-
+export const checkUpdate = async (url: string, appVersion: string) => {
   const response = await fetch(url);
 
   if (response.status != 200) {
@@ -74,16 +70,9 @@ export const checkUpdate = async (api: string, appVersion: string) => {
  */
 export const downloadUpdate = async (
   url: string,
-  filePath: string,
+  downloadPath: string,
   onProgress?: (percent: number) => void
 ) => {
-  const dir = dirname(filePath);
-
-  // 确保目录存在
-  if (!existsSync(dir)) {
-    await mkdir(dir, { recursive: true });
-  }
-
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -92,7 +81,7 @@ export const downloadUpdate = async (
 
   const total = Number(response.headers.get("content-length") ?? 0);
 
-  const fileStream = createWriteStream(filePath);
+  const fileStream = createWriteStream(downloadPath);
 
   //@ts-ignore
   const nodeStream = Stream.Readable.fromWeb(response.body);
