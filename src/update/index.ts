@@ -1,8 +1,9 @@
-import { createWriteStream } from "fs";
+import { createWriteStream, existsSync } from "fs";
 import Stream from "stream";
 import { spawn } from "child_process";
 import { UpdateConfig, UpdateInfo } from "../type";
 import { formatVersion } from "../utils";
+import { unlink } from "fs/promises";
 
 /**
  * 检查更新
@@ -80,6 +81,10 @@ export const downloadUpdate = async (
   }
 
   const total = Number(response.headers.get("content-length") ?? 0);
+
+  if (existsSync(downloadPath)) {
+    await unlink(downloadPath);
+  }
 
   const fileStream = createWriteStream(downloadPath);
 
