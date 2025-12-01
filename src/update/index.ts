@@ -3,9 +3,76 @@ import { createWriteStream, existsSync } from "fs";
 import { mkdir } from "fs/promises";
 import Stream from "stream";
 import { spawn } from "child_process";
+import { UpdateConfig, UpdateInfo } from "../type";
+import { formatVersion } from "../utils";
 
-//下载
-export const download = async (
+/**
+ * 检查更新
+ * @param api 带release的api
+ * @param appVersion 当前版本
+ * @returns
+ */
+export const checkUpdate = async (api: string, appVersion: string) => {
+  const url = `${api}/latest`;
+
+  const response = await fetch(url);
+
+  if (response.status != 200) {
+    console.error("源地址无法访问", url);
+
+    return false;
+  }
+
+  const updateInfo: UpdateInfo = await response.json();
+
+  //找到对应的配置信息
+  const latestConfig = updateInfo.assets.find(
+    item => item.name == "latest.json"
+  );
+
+  //没有配置
+  if (!latestConfig) {
+    console.error("没有找到latest.json文件");
+
+    return false;
+  }
+
+  const res = await fetch(latestConfig.browser_download_url);
+
+  const { md5, version, name }: UpdateConfig = await res.json();
+
+  //不需要更新
+  if (formatVersion(appVersion) >= formatVersion(version)) {
+    console.log("不需要更新");
+
+    return false;
+  }
+
+  //找到对应的安装包
+  const info = updateInfo.assets.find(item => item.name == name);
+
+  //没有安装包
+  if (!info) {
+    console.error("没有找到对应的安装包", name);
+
+    return false;
+  }
+
+  return {
+    version,
+    url: info.browser_download_url,
+    md5,
+  };
+};
+
+/**
+ * 下载更新
+ * @param url 下载更新的url
+ * @param filePath 下载位置
+ * @param onProgress 进度回调函数
+ * @returns
+ */
+export const downloadUpdate = async (
   url: string,
   filePath: string,
   onProgress?: (percent: number) => void
@@ -48,10 +115,7 @@ export const download = async (
 
     fileStream.on("error", () => resolve(false));
 
-    fileStream.on("finish", () => {
-      fileStream.close();
-      resolve(true);
-    });
+    fileStream.on("finish", () => fileStream.close());
 
     fileStream.on("close", async () => {
       await new Promise(r => setTimeout(r, 50));
@@ -61,8 +125,12 @@ export const download = async (
   });
 };
 
-//安装
-export const install = (installerPath: string, silent?: boolean) => {
+/**
+ * 安装更新
+ * @param installerPath 下载位置
+ * @param silent 是否静默安装
+ */
+export const installUpdate = (installerPath: string, silent?: boolean) => {
   const args = [];
 
   if (silent) {
