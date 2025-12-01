@@ -31,7 +31,7 @@ export type PublishOption = BaseOption & {
   updatePack: string;
 
   //其他文件
-  files: (string | File)[];
+  files?: (string | File)[];
 };
 
 export type CreateReleaseOption = BaseOption & {

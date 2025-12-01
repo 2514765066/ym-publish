@@ -88,6 +88,8 @@ export const useGiteeReleases = ({ token, repo, owner }: ReleasesOption) => {
   const Api = `https://gitee.com/api/v5/repos/${owner}/${repo}/releases`;
 
   return async (option: PublishOption) => {
+    const { updatePack, version, files = [] } = option;
+
     console.log("开始Gitee发布");
 
     const id = await createRelease(Api, {
@@ -102,13 +104,13 @@ export const useGiteeReleases = ({ token, repo, owner }: ReleasesOption) => {
     const uploadApi = `${Api}/${id}/attach_files`;
 
     const latestInfo = getLatest({
-      path: option.updatePack,
-      version: option.version,
+      path: updatePack,
+      version: version,
     });
 
     await uploadAssets(uploadApi, {
       token,
-      filepaths: [latestInfo, option.updatePack, ...option.files],
+      filepaths: [latestInfo, updatePack, ...files],
     });
 
     console.log("Gitee发布成功");

@@ -89,6 +89,8 @@ export const useGithubReleases = ({ token, repo, owner }: ReleasesOption) => {
   const Api = `https://api.github.com/repos/${owner}/${repo}/releases`;
 
   return async (option: PublishOption) => {
+    const { updatePack, version, files = [] } = option;
+
     console.log("开始Github发布");
 
     const uploadApi = await createRelease(Api, {
@@ -101,13 +103,13 @@ export const useGithubReleases = ({ token, repo, owner }: ReleasesOption) => {
     console.log("上传文件...");
 
     const latestInfo = getLatest({
-      path: option.updatePack,
-      version: option.version,
+      path: updatePack,
+      version: version,
     });
 
     await uploadAssets(uploadApi, {
       token,
-      filepaths: [latestInfo, option.updatePack, ...option.files],
+      filepaths: [latestInfo, updatePack, ...files],
     });
 
     console.log("Github发布成功");
