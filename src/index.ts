@@ -5,7 +5,6 @@ export * from "./script/index";
 
 //更新api
 export * from "./update/index";
-export * from "./update/gitee";
 
 //类型
 export * from "./type";

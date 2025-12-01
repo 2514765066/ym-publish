@@ -6,6 +6,7 @@ import {
   UploadAssetsOption,
 } from "../type";
 import { existsSync } from "fs";
+import { getLatest } from ".";
 
 //创建 Release
 const createRelease = async (url: string, option: CreateReleaseOption) => {
@@ -94,15 +95,20 @@ export const useGiteeReleases = ({ token, repo, owner }: ReleasesOption) => {
       ...option,
     });
 
-    console.log(`Release 创建成功，ID = ${id}`);
+    console.log(`Release 创建成功`);
 
     console.log("上传文件...");
 
     const uploadApi = `${Api}/${id}/attach_files`;
 
+    const latestInfo = getLatest({
+      path: option.updatePack,
+      version: option.version,
+    });
+
     await uploadAssets(uploadApi, {
       token,
-      filepaths: [...option.filepaths],
+      filepaths: [latestInfo, option.updatePack, ...option.files],
     });
 
     console.log("Gitee发布成功");

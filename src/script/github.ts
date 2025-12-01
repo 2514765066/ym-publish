@@ -6,6 +6,7 @@ import {
   UploadAssetsOption,
 } from "../type";
 import { existsSync } from "fs";
+import { getLatest } from ".";
 
 // 创建 Release
 const createRelease = async (url: string, option: CreateReleaseOption) => {
@@ -99,9 +100,14 @@ export const useGithubReleases = ({ token, repo, owner }: ReleasesOption) => {
 
     console.log("上传文件...");
 
+    const latestInfo = getLatest({
+      path: option.updatePack,
+      version: option.version,
+    });
+
     await uploadAssets(uploadApi, {
       token,
-      filepaths: option.filepaths,
+      filepaths: [latestInfo, option.updatePack, ...option.files],
     });
 
     console.log("Github发布成功");

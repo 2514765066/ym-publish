@@ -27,8 +27,11 @@ export interface BaseOption {
 }
 
 export type PublishOption = BaseOption & {
-  //文件
-  filepaths: (string | File)[];
+  //安装包路径
+  updatePack: string;
+
+  //其他文件
+  files: (string | File)[];
 };
 
 export type CreateReleaseOption = BaseOption & {
