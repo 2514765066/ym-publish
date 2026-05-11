@@ -124,42 +124,13 @@ export const downloadUpdate = async (
  * @param installerPath 下载位置
  * @param silent 是否静默安装
  */
-export const installUpdate = (
-  installerPath: string,
-  appPath: string,
-  silent?: boolean,
-) => {
-  const args = [];
-
-  if (silent) {
-    args.push("/S");
-  }
-
+export const installUpdate = (installerPath: string, args: string[] = []) => {
   const child = spawn(installerPath, args, {
     detached: true,
     stdio: "ignore",
   });
 
-  child.on("close", code => {
-    if (code === 0) {
-      console.log("安装完成，正在启动新版本...");
-
-      // 5. 启动安装后的新应用
-      const newApp = spawn(appPath, [], {
-        detached: true,
-        stdio: "ignore",
-      });
-
-      // 允许新进程在父进程退出后继续运行
-      newApp.unref();
-
-      // 6. 退出当前旧版本应用，防止占位冲突
-      // 如果是在 Electron 主进程中，建议使用 app.quit()
-      process.exit(0);
-    } else {
-      console.error(`安装包异常退出，错误码: ${code}`);
-    }
-  });
-
   child.unref();
+
+  process.exit(0);
 };
